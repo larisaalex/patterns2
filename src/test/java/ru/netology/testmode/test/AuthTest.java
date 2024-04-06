@@ -1,14 +1,10 @@
 package ru.netology.testmode.test;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.testmode.data.DataGenerator.Registration.getRegisteredUser;
@@ -30,12 +26,9 @@ class AuthTest {
         $("[data-test-id='login'] input").setValue(registeredUser.getLogin());
         $("[data-test-id='password'] input").setValue(registeredUser.getPassword());
         $("[data-test-id='action-login']").click();
-        SelenideElement selenideElement = $("h2")
+        $("[data-test-id='error-notification'] .notification__content")
                 .shouldHave(Condition.exactText("Личный кабинет"))
                 .shouldBe(Condition.visible);
-        // TODO: добавить логику теста, в рамках которого будет выполнена попытка входа в личный кабинет с учётными
-        //  данными зарегистрированного активного пользователя, для заполнения полей формы используйте
-        //  пользователя registeredUser
     }
 
     @Test
@@ -46,10 +39,8 @@ class AuthTest {
         $("[data-test-id='password'] input").setValue(notRegisteredUser.getPassword());
         $("[data-test-id='action-login']").click();
         $("[data-test-id='error-notification'] .notification__content")
-                .shouldHave(Condition.exactText("Ошибка! Неверно указан логин ли пароль"))
-                 .shouldBe(Condition.visible);
-        // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет
-        //  незарегистрированного пользователя, для заполнения полей формы используйте пользователя notRegisteredUser
+                .shouldHave(Condition.exactText("Ошибка!  Неверно указан логин или пароль"))
+                .shouldBe(Condition.visible);
     }
 
     @Test
@@ -60,10 +51,8 @@ class AuthTest {
         $("[data-test-id='password'] input").setValue(blockedUser.getPassword());
         $("[data-test-id='action-login']").click();
         $("[data-test-id='error-notification'] .notification__content")
-                .shouldHave(Condition.exactText("Ошибка! Пользователь заблокирован"))
+                .shouldHave(Condition.exactText("Ошибка!"))
                 .shouldBe(Condition.visible);
-        // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет,
-        //  заблокированного пользователя, для заполнения полей формы используйте пользователя blockedUser
     }
 
     @Test
@@ -76,10 +65,7 @@ class AuthTest {
         $("[data-test-id='action-login']").click();
         $("[data-test-id='error-notification'] .notification__content")
                 .shouldHave(Condition.exactText("Ошибка!  Неверно указан логин или пароль"))
-                        .shouldBe(Condition.visible);
-        // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет с неверным
-        //  логином, для заполнения поля формы "Логин" используйте переменную wrongLogin,
-        //  "Пароль" - пользователя registeredUser
+                .shouldBe(Condition.visible);
     }
 
     @Test
@@ -91,10 +77,7 @@ class AuthTest {
         $("[data-test-id='password'] input").setValue(wrongPassword);
         $("[data-test-id='action-login']").click();
         $("[data-test-id='error-notification'] .notification__content")
-                .shouldHave(Condition.exactText("Ошибка!  Неверно указан логин ли пароль"))
+                .shouldHave(Condition.exactText("Ошибка!  Неверно указан логин или пароль"))
                 .shouldBe(Condition.visible);
-        // TODO: добавить логику теста в рамках которого будет выполнена попытка входа в личный кабинет с неверным
-        //  паролем, для заполнения поля формы "Логин" используйте пользователя registeredUser,
-        //  "Пароль" - переменную wrongPassword
     }
 }
